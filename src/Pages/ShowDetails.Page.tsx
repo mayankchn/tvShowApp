@@ -1,15 +1,18 @@
 import { FC } from "react";
+import { Link } from "react-router-dom";
 import CastCard from "../Components/CastCard";
 import GenrePill from "../Components/GenrePill";
 import withRouter, { WithRouterProps } from "../hocs/withRouter";
-
 type ShowDetailPageProps = WithRouterProps;
 
 const ShowDetailPage: FC<WithRouterProps> = ({ params }) => {
   console.log(params);
   return (
     <div className="mt-2">
-      <h2 className="text-4xl font-semibold tracking-wide">The Witcher</h2>
+      <div className="flex justify-between items-center">
+        <h2 className="text-4xl font-semibold tracking-wide">The Witcher</h2>
+        <Link to="/" className="text-sm font-semibold tracking-wide underline">BACK HOME</Link>
+      </div>
       <div className="flex space-x-3 my-2 bg-gray-300 p-2 rounded-sm">
         <GenrePill name="Action" />
         <GenrePill name="Fiction" />
