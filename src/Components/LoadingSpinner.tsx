@@ -1,6 +1,11 @@
+import { FC } from "react";
 import { ImSpinner } from "react-icons/im";
 
-const LoadingSpinner = ({ className }: { className?: string }) => {
+type LoadingSpinnerProps = {
+  className?: string;
+}
+
+const LoadingSpinner:FC<LoadingSpinnerProps> = ({ className }) => {
   return <ImSpinner className={`animate-spin ${className}`} />;
 };
 

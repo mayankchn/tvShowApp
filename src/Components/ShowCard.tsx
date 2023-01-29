@@ -1,6 +1,9 @@
 import { Link } from "react-router-dom";
+import {FC} from "react"
 
-function ShowCard() {
+type ShowCardProps = {}
+
+const ShowCard:FC<ShowCardProps> = () => {
   return (
     <div className="max-w-xs rounded-md shadow-md p-2 m-1">
       <img

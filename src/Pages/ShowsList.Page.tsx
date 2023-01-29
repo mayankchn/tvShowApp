@@ -1,7 +1,10 @@
 import SearchBar from "../Components/SearchBar";
 import ShowCard from "../Components/ShowCard";
+import {FC} from "react"
 
-function ShowListPage() {
+type ShowListPageProps = {}
+
+const ShowListPage:FC<ShowListPageProps> = () => {
   return (
     <div className="mt-2">
       <SearchBar />

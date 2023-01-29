@@ -1,6 +1,10 @@
-import { memo } from "react";
+import { FC, memo } from "react";
 
-const GenrePill = ({ name }: { name: string }) => {
+type GenrePillProps = {
+  name:String;
+}
+
+const GenrePill:FC<GenrePillProps> = ({name}) => {
   return <p className="font-semibold">{name}</p>;
 };
 

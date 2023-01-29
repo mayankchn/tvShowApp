@@ -1,12 +1,11 @@
-import { memo } from "react";
+import { FC, memo } from "react";
 
-const CastCard = ({
-  avatarLink,
-  name,
-}: {
+type CastCartProps = {
   avatarLink: string;
   name: string;
-}) => {
+}
+
+const CastCard: FC<CastCartProps> = ({ avatarLink, name }) => {
   return (
     <div className="p-1 m-1">
       <img className="w-28 rounded-sm" src={avatarLink} alt="" />
