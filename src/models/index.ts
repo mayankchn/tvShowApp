@@ -6,3 +6,9 @@ export type Show = {
     rating: { average?: number };
     summary?: string;
 }
+
+export type Cast = {
+    id:number;
+    image?:{ medium: string; original: string };
+    name:string;
+}

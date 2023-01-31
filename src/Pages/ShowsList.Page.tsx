@@ -18,14 +18,14 @@ type ShowListPageProps = {
 const ShowListPage: FC<ShowListPageProps> = ({ query, shows, showsQueryChange, showsLoaded }) => {
 
   function handleSearch(e: any) {
-    console.log('handle search...', e.target.value)
+    // console.log('handle search...', e.target.value)
     showsQueryChange(e.target.value)
   }
 
   useEffect(() => {
-    console.log('i run...')
+    // console.log('i run...')
     const promise = getShow(query).then((response) => {
-      console.log('response from api is ', response)
+      // console.log('response from api is ', response)
       showsLoaded(response)
     })
   }, [query])
