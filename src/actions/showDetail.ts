@@ -1,11 +1,11 @@
 import { ActionCreator } from ".";
 import { Show } from "../models";
 
-export const SHOW_ID_CHANGED = "SHOW_ID_CHANGED";
+export const SHOW_DETAIL_LOADED = "SHOW_DETAIL_LOADED";
 
-export const showIdChangedAction:ActionCreator<{show:Show}> = (show:Show) =>{
+export const showDetailLoadedAction:ActionCreator<{show:Show}> = (show:Show) =>{
     return {
-        type:SHOW_ID_CHANGED,
+        type:SHOW_DETAIL_LOADED,
         payload:show,
     }
 }

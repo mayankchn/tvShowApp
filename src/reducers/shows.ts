@@ -3,6 +3,7 @@ import { AnyAction } from "redux"
 import { SHOWS_LOADED, SHOWS_QUERY_CHANGE } from "../actions/shows";
 import produce from "immer";
 import { schema, normalize } from "normalizr";
+import { Action } from "../actions";
 
 type State = {
     shows: { [id: number]: Show };
@@ -14,7 +15,7 @@ const initialState: State = {
     query: "",
 }
 
-export const showReducer = (state = initialState, action: AnyAction) => {
+export const showReducer = (state = initialState, action: Action) => {
     switch (action.type) {
         case SHOWS_LOADED:
             return produce(state, (draft) => {
