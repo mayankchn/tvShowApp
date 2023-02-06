@@ -1,38 +1,59 @@
-import { FC } from "react";
+import { FC, useEffect } from "react";
+import { connect } from "react-redux";
+import { Link } from "react-router-dom";
+import { castLoadedAction } from "../actions/cast";
+import { showDetailLoadedAction } from "../actions/showDetail";
+import { showIdChangedAction } from "../actions/showId";
+import { getCast, getShowDetail } from "../api";
 import CastCard from "../Components/CastCard";
 import GenrePill from "../Components/GenrePill";
 import withRouter, { WithRouterProps } from "../hocs/withRouter";
+import { Cast, Show } from "../models";
+import { castSelector } from "../selectors/cast";
+import { showState } from "../selectors/showDetail";
+import { State } from "../store";
 
-type ShowDetailPageProps = WithRouterProps;
 
-const ShowDetailPage: FC<WithRouterProps> = ({ params }) => {
-  console.log(params);
+type ShowDetailPageProps = {
+  show: Show;
+  cast: Cast[];
+  showId: number;
+  showIdChanged: (id: number) => void;
+} & WithRouterProps;
+
+const dummyImage = "https://images.unsplash.com/photo-1628155930542-3c7a64e2c833?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=774&q=80"
+
+const dummySummary = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+
+const ShowDetailPage: FC<ShowDetailPageProps> = ({ showId, show, cast, showIdChanged }) => {
+
+  useEffect(()=>{
+    showIdChanged(showId)
+  },[showId])
+
   return (
     <div className="mt-2">
-      <h2 className="text-4xl font-semibold tracking-wide">The Witcher</h2>
+      <div className="flex justify-between items-center">
+        <h2 className="text-4xl font-semibold tracking-wide">{show.name}</h2>
+        <Link to="/" className="text-sm font-semibold tracking-wide underline">BACK HOME</Link>
+      </div>
       <div className="flex space-x-3 my-2 bg-gray-300 p-2 rounded-sm">
-        <GenrePill name="Action" />
-        <GenrePill name="Fiction" />
-        <GenrePill name="Thriller" />
-        <GenrePill name="Violence" />
+        {show.genres?.map((genre, i) => {
+          return (
+            <GenrePill key={i} name={genre} />
+          )
+        }) || "unknown"}
       </div>
       <div className="mt-2 flex">
         <img
-          src="https://static.tvmaze.com/uploads/images/medium_portrait/423/1058422.jpg"
+          src={show.image?.medium || show.image?.original || dummyImage}
           alt=""
           className="object-cover object-center w-full rounded-t-md h-72"
         />
         <div className="ml-2">
-          <p>
-            Based on the best-selling fantasy series, The Witcher is an epic
-            tale of fate and family. Geralt of Rivia, a solitary monster hunter,
-            struggles to find his place in a world where people often prove more
-            wicked than beasts. But when destiny hurtles him toward a powerful
-            sorceress, and a young princess with a dangerous secret, the three
-            must learn to navigate the increasingly volatile Continent together.
-          </p>
+          <p>{show.summary || dummySummary}</p>
           <p className="mt-2 text-lg font-bold border border-gray-700 rounded-md px-2 py-1 max-w-max">
-            Rating: <span className="text-gray-700">9.5/10</span>
+            Rating: <span className="text-gray-700">{show.rating?.average || "unavailable"}</span>
           </p>
         </div>
       </div>
@@ -40,58 +61,32 @@ const ShowDetailPage: FC<WithRouterProps> = ({ params }) => {
       <div className="mt-2">
         <h4 className="text-2xl font-semibold tracking-wide">Cast</h4>
         <div className="flex flex-wrap">
-          <CastCard
-            avatarLink="https://static.tvmaze.com/uploads/images/medium_portrait/218/545468.jpg"
-            name="Henry Cavill"
-          />
-          <CastCard
-            avatarLink="https://static.tvmaze.com/uploads/images/medium_portrait/218/545472.jpg"
-            name="Freya Allan"
-          />
-          <CastCard
-            avatarLink="https://static.tvmaze.com/uploads/images/medium_portrait/218/545470.jpg"
-            name="Anya Chalotra"
-          />
-          <CastCard
-            avatarLink="https://static.tvmaze.com/uploads/images/medium_portrait/232/581040.jpg"
-            name="Mimi Ndiweni"
-          />
-          <CastCard
-            avatarLink="https://static.tvmaze.com/uploads/images/medium_portrait/218/545468.jpg"
-            name="Henry Cavill"
-          />
-          <CastCard
-            avatarLink="https://static.tvmaze.com/uploads/images/medium_portrait/218/545472.jpg"
-            name="Freya Allan"
-          />
-          <CastCard
-            avatarLink="https://static.tvmaze.com/uploads/images/medium_portrait/218/545470.jpg"
-            name="Anya Chalotra"
-          />
-          <CastCard
-            avatarLink="https://static.tvmaze.com/uploads/images/medium_portrait/232/581040.jpg"
-            name="Mimi Ndiweni"
-          />
-          <CastCard
-            avatarLink="https://static.tvmaze.com/uploads/images/medium_portrait/218/545468.jpg"
-            name="Henry Cavill"
-          />
-          <CastCard
-            avatarLink="https://static.tvmaze.com/uploads/images/medium_portrait/218/545472.jpg"
-            name="Freya Allan"
-          />
-          <CastCard
-            avatarLink="https://static.tvmaze.com/uploads/images/medium_portrait/218/545470.jpg"
-            name="Anya Chalotra"
-          />
-          <CastCard
-            avatarLink="https://static.tvmaze.com/uploads/images/medium_portrait/232/581040.jpg"
-            name="Mimi Ndiweni"
-          />
+          {cast.length ? cast.map((item, i) => {
+            return (
+              <CastCard
+                key={i}
+                avatarLink={item.image?.medium || item.image?.original || dummyImage}
+                name={item.name}
+              />
+            )
+          }) : <span>Unavailable</span>}
         </div>
       </div>
     </div>
   );
 };
 
-export default withRouter(ShowDetailPage);
+const mapStateToProps = (state: State, ownProps: ShowDetailPageProps) => {
+  const id = +ownProps.params.showId;
+  return { 
+    showId: id,
+    show: showState(state),
+    cast: castSelector(state),
+  }
+}
+
+const mapDispatchToProps = {
+  showIdChanged: showIdChangedAction,
+}
+
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(ShowDetailPage));
