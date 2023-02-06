@@ -10,8 +10,8 @@ type State = {
     cast: Cast[]
 }
 const initialState: State = {
-    id:-1,
-    cast: []
+    id:undefined!,
+    cast: [],
 }
 
 export const castReducer = (currentState = initialState, action: Action) => {

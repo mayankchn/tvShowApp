@@ -78,7 +78,7 @@ const ShowDetailPage: FC<ShowDetailPageProps> = ({ showId, show, cast, showIdCha
 
 const mapStateToProps = (state: State, ownProps: ShowDetailPageProps) => {
   const id = +ownProps.params.showId;
-  return {
+  return { 
     showId: id,
     show: showState(state),
     cast: castSelector(state),

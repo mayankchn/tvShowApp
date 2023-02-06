@@ -9,8 +9,15 @@ type State = {
     show: Show;
 }
 const initialState:State = {
-    id:-1,
-    show: {}
+    id:undefined!,
+    show: {
+        id: undefined!,
+        // image?: { medium: string; original: string }
+        name: "",
+        genres: [],
+        rating: {},
+        // summary?: string;
+    }
 }
 
 export const showDetailReducer = (currenState = initialState, action: Action) => {
