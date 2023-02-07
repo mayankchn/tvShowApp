@@ -1,5 +1,5 @@
 import { FC, useEffect } from "react";
-import { connect } from "react-redux";
+import { connect, ConnectedProps } from "react-redux";
 import { Link } from "react-router-dom";
 import { castLoadedAction } from "../actions/cast";
 import { showDetailLoadedAction } from "../actions/showDetail";
@@ -13,13 +13,9 @@ import { castSelector } from "../selectors/cast";
 import { showState } from "../selectors/showDetail";
 import { State } from "../store";
 
+type OwnProps = WithRouterProps
 
-type ShowDetailPageProps = {
-  show: Show;
-  cast: Cast[];
-  showId: number;
-  showIdChanged: (id: number) => void;
-} & WithRouterProps;
+type ShowDetailPageProps = ReduxProps & OwnProps
 
 const dummyImage = "https://images.unsplash.com/photo-1628155930542-3c7a64e2c833?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=774&q=80"
 
@@ -27,9 +23,9 @@ const dummySummary = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, s
 
 const ShowDetailPage: FC<ShowDetailPageProps> = ({ showId, show, cast, showIdChanged }) => {
 
-  useEffect(()=>{
+  useEffect(() => {
     showIdChanged(showId)
-  },[showId])
+  }, [showId])
 
   return (
     <div className="mt-2">
@@ -51,7 +47,7 @@ const ShowDetailPage: FC<ShowDetailPageProps> = ({ showId, show, cast, showIdCha
           className="object-cover object-center w-full rounded-t-md h-72"
         />
         <div className="ml-2">
-          <p>{show.summary || dummySummary}</p>
+          <p dangerouslySetInnerHTML={{__html:show.summary || dummySummary}}></p>
           <p className="mt-2 text-lg font-bold border border-gray-700 rounded-md px-2 py-1 max-w-max">
             Rating: <span className="text-gray-700">{show.rating?.average || "unavailable"}</span>
           </p>
@@ -76,9 +72,9 @@ const ShowDetailPage: FC<ShowDetailPageProps> = ({ showId, show, cast, showIdCha
   );
 };
 
-const mapStateToProps = (state: State, ownProps: ShowDetailPageProps) => {
+const mapStateToProps = (state: State, ownProps: OwnProps) => {
   const id = +ownProps.params.showId;
-  return { 
+  return {
     showId: id,
     show: showState(state),
     cast: castSelector(state),
@@ -88,5 +84,6 @@ const mapStateToProps = (state: State, ownProps: ShowDetailPageProps) => {
 const mapDispatchToProps = {
   showIdChanged: showIdChangedAction,
 }
-
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(ShowDetailPage));
+const connector = connect(mapStateToProps, mapDispatchToProps)
+type ReduxProps = ConnectedProps<typeof connector>
+export default withRouter(connector(ShowDetailPage));
