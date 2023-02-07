@@ -1,17 +1,12 @@
 import SearchBar from "../Components/SearchBar";
 import ShowCard from "../Components/ShowCard";
 import { FC} from "react"
-import { Show } from "../models";
 import { showsQueryChangeAction } from "../actions/shows";
-import { connect } from "react-redux/es/exports";
+import { connect, ConnectedProps } from "react-redux/es/exports";
 import { showsQuerySelector, showsSelector } from "../selectors/shows";
 import { State } from "../store";
 
-type ShowListPageProps = {
-  query: string;
-  shows: Show[];
-  showsQueryChange: (query: string) => void;
-}
+type ShowListPageProps = ReduxProps
 
 const ShowListPage: FC<ShowListPageProps> = ({ query, shows, showsQueryChange }) => {
 
@@ -43,5 +38,8 @@ const mapStateToProps = (state: State) => {
 const mapDispatchToProps = {
   showsQueryChange: showsQueryChangeAction
 }
+const connector = connect(mapStateToProps, mapDispatchToProps)
 
-export default connect(mapStateToProps, mapDispatchToProps)(ShowListPage);
+type ReduxProps = ConnectedProps<typeof connector> 
+
+export default connector(ShowListPage);
